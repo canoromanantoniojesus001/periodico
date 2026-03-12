@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>El Crepúsculo Ibérico</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#f0e8d0;--paper2:#e8dfc4;--paper3:#ddd3b4;
+  --ink:#1a1208;--ink2:#2a1f0e;
+  --red:#b01c1c;--red2:#8a1414;
+  --ochre:#c47c0a;--forest:#3d5a3e;--grey:#5a5040;--lgrey:#9a8e78;
+}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Libre Baskerville',serif;overflow-x:hidden;cursor:none;max-width:1400px;margin:0 auto}
+body::before{content:'';position:fixed;inset:0;z-index:9995;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.055;mix-blend-mode:multiply}
+
+/* CURSOR */
+#dot{position:fixed;width:8px;height:8px;background:var(--red);pointer-events:none;z-index:99999;transform:translate(-50%,-50%) rotate(45deg)}
+#ring{position:fixed;width:32px;height:32px;border:2px solid var(--ink);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .18s,height .18s,border-color .18s}
+.hovering #ring{width:48px;height:48px;border-color:var(--red)}
+.hovering #dot{opacity:0}
+
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:10000;background:var(--paper);display:flex;align-items:center;justify-content:center;transition:opacity 1s,visibility 1s}
+#loader.out{opacity:0;visibility:hidden}
+.ld-wrap{border:3px solid var(--ink);padding:48px 72px;text-align:center;position:relative}
+.ld-wrap::before,.ld-wrap::after{content:'✦';position:absolute;top:50%;transform:translateY(-50%);font-size:22px;color:var(--red)}
+.ld-wrap::before{left:-14px}.ld-wrap::after{right:-14px}
+.ld-eye{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.6em;text-transform:uppercase;color:var(--lgrey);margin-bottom:6px}
+.ld-tit{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;font-style:italic;animation:ldrock .9s ease infinite alternate}
+@keyframes ldrock{from{transform:rotate(-.4deg)}to{transform:rotate(.4deg)}}
+.ld-sub{font-family:'Special Elite',cursive;font-size:13px;color:var(--red);margin-top:6px}
+.ld-bar{height:2px;background:var(--paper3);margin-top:24px;position:relative;overflow:hidden}
+.ld-bar::after{content:'';position:absolute;inset-block:0;left:0;width:0;background:var(--red);animation:ldf 2.4s cubic-bezier(.77,0,.175,1) forwards}
+@keyframes ldf{to{width:100%}}
+
+/* NAV */
+nav{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:1400px;z-index:500;background:var(--paper);border-bottom:3px solid var(--ink);transition:box-shadow .3s}
+nav.slim{box-shadow:0 4px 20px rgba(26,18,8,.12)}
+.nav-strip{background:var(--red);padding:5px 36px;display:flex;justify-content:space-between;align-items:center}
+.nav-strip span{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(240,232,208,.7);font-weight:300}
+.nav-strip strong{color:var(--paper)}
+.nav-top{padding:5px 36px;border-bottom:1px solid var(--ink);display:flex;justify-content:space-between;align-items:center}
+.nav-date,.nav-price{font-family:'Special Elite',cursive;font-size:11px;color:var(--lgrey)}
+.nav-motto{font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:var(--red)}
+.nav-main{padding:8px 36px;display:flex;justify-content:space-between;align-items:center}
+.masthead{text-align:center;flex:1}
+.masthead-title{font-family:'Playfair Display',serif;font-size:clamp(20px,3.2vw,42px);font-weight:900;font-style:italic;color:var(--ink);line-height:1;display:block;opacity:0;animation:fi .8s ease 2.8s forwards;cursor:none}
+.masthead-sub{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--red);display:block;margin-top:2px;opacity:0;animation:fi .8s ease 3s forwards}
+@keyframes fi{to{opacity:1}}
+.nav-secs{display:flex;opacity:0;animation:fi .8s ease 3.1s forwards}
+.nav-secs a{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);text-decoration:none;font-weight:500;padding:6px 11px;border-left:1px solid var(--paper3);transition:background .2s,color .2s;white-space:nowrap}
+.nav-secs a:first-child{border-left:none}
+.nav-secs a:hover,.nav-secs a.activa{background:var(--ink);color:var(--paper)}
+.nav-secs a.hot{background:var(--red);color:var(--paper)}
+.nav-secs a.hot:hover{background:var(--red2)}
+/* Botón editor oculto en la cabecera (triple click en el año) */
+#editor-trigger{cursor:none;user-select:none}
+
+/* PÁGINAS */
+.pagina{display:none;min-height:100vh;animation:pgfade .45s ease}
+.pagina.activa{display:block}
+@keyframes pgfade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pag-inner{padding:0 36px 60px}
+
+/* PORTADA */
+.portada-dateline{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--paper3);margin-bottom:16px}
+.portada-tag{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.5em;text-transform:uppercase;background:var(--red);color:var(--paper);padding:3px 10px;font-weight:500}
+.portada-dtxt{font-family:'Special Elite',cursive;font-size:12px;color:var(--lgrey)}
+.rule-doble{display:block;width:100%;border-top:3px solid var(--ink);border-bottom:1px solid var(--ink);padding-top:3px}
+.gran-titular{font-family:'Playfair Display',serif;font-size:clamp(48px,9.5vw,136px);font-weight:900;text-transform:uppercase;line-height:.84;letter-spacing:-.03em;border-bottom:3px solid var(--ink);padding-bottom:16px}
+.gt-line{display:block;overflow:hidden}
+.gt-line span{display:block;transform:translateY(106%);animation:su 1.3s cubic-bezier(.16,1,.3,1) forwards}
+.gt-line:nth-child(1) span{animation-delay:1.5s}
+.gt-line:nth-child(2) span{animation-delay:1.65s;font-style:italic;color:var(--red)}
+.gt-line:nth-child(3) span{animation-delay:1.8s}
+.gt-line:nth-child(4) span{animation-delay:1.95s;font-style:italic}
+@keyframes su{to{transform:translateY(0)}}
+.pcols{display:grid;grid-template-columns:1.1fr 3px 2fr 3px 1.1fr;padding:24px 0 32px}
+.col-div{background:var(--ink)}
+.pcol{padding:0 22px}.pcol:first-child{padding-left:0}.pcol:last-child{padding-right:0}
+.col-lbl{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--paper3)}
+.col-body{font-size:13px;line-height:1.75;color:var(--grey)}
+.col-body em{color:var(--ink);font-style:italic;font-weight:700}
+.col-body strong{color:var(--red)}
+.dropcap::first-letter{font-family:'Playfair Display',serif;font-size:4.5em;font-weight:900;float:left;line-height:.72;margin-right:6px;margin-top:8px;color:var(--red)}
+.col-subtit{font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,21px);font-weight:900;font-style:italic;line-height:1.1;margin-bottom:12px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.portada-illus{border:2px solid var(--ink);padding:18px;text-align:center;margin:16px 0;background:var(--paper2)}
+.portada-illus-img{font-size:58px;line-height:1;filter:grayscale(1) contrast(1.5) brightness(.65)}
+.portada-illus-cap{font-family:'Special Elite',cursive;font-size:10px;color:var(--grey);margin-top:7px;font-style:italic}
+.col-sum{display:flex;flex-direction:column}
+.sum-it{padding:8px 4px;border-bottom:1px solid var(--paper3);cursor:none;transition:background .2s}
+.sum-it:last-child{border-bottom:none}
+.sum-it:hover{background:var(--paper2)}
+.sum-sec{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--red);font-weight:600;display:block}
+.sum-tit{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;font-weight:700;line-height:1.2;display:block}
+.sum-pag{font-family:'Special Elite',cursive;font-size:10px;color:var(--lgrey);display:block}
+.scue{padding:12px 36px;border-top:1px solid var(--paper3);display:flex;align-items:center;justify-content:center;gap:14px}
+.scue-line{width:36px;height:1px;background:var(--lgrey);position:relative;overflow:hidden}
+.scue-line::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--red);animation:scm 1.6s ease infinite}
+@keyframes scm{to{left:200%}}
+.scue-txt{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--lgrey);font-weight:300}
+
+/* TICKER */
+.ticker-wrap{background:var(--red);overflow:hidden;border-top:2px solid var(--red2);border-bottom:2px solid var(--red2)}
+.ticker-inner{display:flex;white-space:nowrap;animation:tick 22s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+.ti{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;font-weight:700;color:var(--paper);flex-shrink:0;padding:12px 32px;display:inline-flex;align-items:center;gap:32px}
+.ti::after{content:'◆';font-style:normal;font-size:7px;opacity:.6}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* SECCIÓN HEADER */
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:32px}
+.sec-head-line{flex:1;height:1px;background:var(--ink)}
+.sec-head-tit{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.55em;text-transform:uppercase;color:var(--red);font-weight:600;white-space:nowrap}
+.sec-head-orn{color:var(--red);font-size:15px}
+.sec-head-num{font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:var(--lgrey)}
+
+/* TARJETAS DE ARTÍCULO — clicables */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:2px solid var(--ink)}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:2px solid var(--ink)}
+.grid-feat{display:grid;grid-template-columns:2fr 1fr;gap:0;border:2px solid var(--ink)}
+.art{padding:26px 22px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);position:relative;cursor:none;transition:background .28s}
+.art:hover{background:var(--paper2)}
+.art.no-br{border-right:none}.art.no-bb{border-bottom:none}
+.art-clickable{cursor:none}
+.art-clickable::after{content:'Leer →';position:absolute;bottom:18px;right:18px;font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--lgrey);opacity:0;transition:opacity .25s,color .25s}
+.art-clickable:hover::after{opacity:1;color:var(--red)}
+.art-sec{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.5em;text-transform:uppercase;font-weight:600;margin-bottom:7px}
+.art-sec.rojo{color:var(--red)}.art-sec.verde{color:var(--forest)}.art-sec.ocre{color:var(--ochre)}.art-sec.gris{color:var(--grey)}
+.art-tit{font-family:'Playfair Display',serif;font-size:clamp(15px,1.7vw,23px);font-weight:900;line-height:1.05;margin-bottom:9px}
+.art-tit em{font-style:italic;color:var(--red)}
+.art-tit.grande{font-size:clamp(20px,2.6vw,34px)}
+.art-sum{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:var(--grey);margin-bottom:11px;line-height:1.5;border-left:3px solid var(--paper3);padding-left:10px}
+.art-cpo{font-size:13px;line-height:1.8;color:var(--grey)}
+.art-cpo em{color:var(--ink);font-style:italic}.art-cpo strong{color:var(--red)}
+.art-firma{display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:11px;border-top:1px solid var(--paper3)}
+.art-fn{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--lgrey);font-weight:400}
+.art-fc{font-family:'Special Elite',cursive;font-size:10px;color:var(--lgrey)}
+.art-fd{font-family:'Special Elite',cursive;font-size:10px;color:var(--lgrey);margin-left:auto}
+.art-img{width:calc(100% + 44px);margin:-26px -22px 18px;background:var(--paper3);border-bottom:2px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:22px;font-size:52px;filter:grayscale(1) contrast(1.2) brightness(.7);position:relative;overflow:hidden}
+.art-img::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent 0,transparent 4px,rgba(26,18,8,.04) 4px,rgba(26,18,8,.04) 5px)}
+
+/* PÁGINA ARTÍCULO COMPLETO */
+#pag-articulo .art-full-header{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:28px}
+.art-full-seccion{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.55em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.art-full-seccion::before{content:'';flex:1;height:1px;background:var(--paper3)}
+.art-full-seccion::after{content:'';flex:3;height:1px;background:var(--paper3)}
+.art-full-tit{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,72px);font-weight:900;line-height:.9;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:16px}
+.art-full-tit em{font-style:italic;color:var(--red)}
+.art-full-sum{font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,24px);font-style:italic;color:var(--grey);line-height:1.4;border-left:4px solid var(--red);padding-left:18px;margin-bottom:20px}
+.art-full-meta{display:flex;gap:20px;align-items:center;padding:12px 0;border-top:1px solid var(--paper3);border-bottom:1px solid var(--paper3)}
+.art-full-autor{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--grey);font-weight:500}
+.art-full-cargo{font-family:'Special Elite',cursive;font-size:11px;color:var(--lgrey)}
+.art-full-fecha{font-family:'Special Elite',cursive;font-size:11px;color:var(--lgrey);margin-left:auto}
+.art-full-body{display:grid;grid-template-columns:2fr 1fr;gap:40px;padding-top:28px}
+.art-full-text{font-size:14px;line-height:1.9;color:var(--grey)}
+.art-full-text p{margin-bottom:18px}
+.art-full-text em{color:var(--ink);font-style:italic}
+.art-full-text strong{color:var(--red)}
+.art-full-text .dropcap::first-letter{font-family:'Playfair Display',serif;font-size:5em;font-weight:900;float:left;line-height:.72;margin-right:8px;margin-top:10px;color:var(--red)}
+.art-full-sidebar{}
+.art-full-pullquote{border:2px solid var(--ink);padding:24px;margin-bottom:24px;background:var(--paper2);position:relative}
+.art-full-pullquote::before{content:'"';font-family:'Playfair Display',serif;font-size:80px;font-weight:900;color:rgba(176,28,28,.15);position:absolute;top:-10px;left:8px;line-height:1}
+.art-full-pullquote p{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;line-height:1.3;position:relative;z-index:1}
+.art-full-related{border-top:2px solid var(--ink);padding-top:16px}
+.art-full-related h4{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.45em;text-transform:uppercase;color:var(--red);margin-bottom:14px;font-weight:600}
+.art-full-related-item{padding:10px 0;border-bottom:1px solid var(--paper3);cursor:none;transition:background .2s}
+.art-full-related-item:hover{padding-left:4px}
+.art-full-related-item:last-child{border-bottom:none}
+.art-full-related-item .rs{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);font-weight:600}
+.art-full-related-item .rt{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;font-weight:700;line-height:1.2}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--ink);text-decoration:none;padding:10px 0;border-bottom:2px solid var(--ink);margin-bottom:28px;transition:color .2s,border-color .2s;cursor:none}
+.back-btn:hover{color:var(--red);border-color:var(--red)}
+
+/* OPINIÓN */
+.opinion-box{background:var(--ink);color:var(--paper);padding:36px;position:relative;overflow:hidden}
+.opinion-box::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent 0,transparent 8px,rgba(255,255,255,.02) 8px,rgba(255,255,255,.02) 9px);pointer-events:none}
+.opinion-lbl{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--ochre);margin-bottom:16px;font-weight:500;position:relative;z-index:1}
+.opinion-q{font-family:'Playfair Display',serif;font-size:clamp(17px,2.3vw,32px);font-style:italic;font-weight:700;line-height:1.2;color:var(--paper);position:relative;z-index:1;margin-bottom:18px}
+.opinion-q strong{color:var(--ochre)}
+.opinion-f{font-family:'Special Elite',cursive;font-size:11px;color:rgba(240,232,208,.4);position:relative;z-index:1}
+.esquela{border:3px solid var(--ink);padding:26px;text-align:center;background:var(--paper2);position:relative}
+.esquela::before,.esquela::after{content:'† † †';position:absolute;left:50%;transform:translateX(-50%);font-size:11px;color:var(--ink);letter-spacing:.5em}
+.esquela::before{top:-10px;background:var(--paper2);padding:0 8px}
+.esquela::after{bottom:-10px;background:var(--paper2);padding:0 8px}
+.esq-cruz{font-size:30px;display:block;margin-bottom:10px}
+.esq-nom{font-family:'Playfair Display',serif;font-size:21px;font-weight:900;font-style:italic;margin-bottom:6px}
+.esq-fecha{font-family:'Special Elite',cursive;font-size:11px;color:var(--lgrey);margin-bottom:9px}
+.esq-txt{font-size:13px;line-height:1.7;color:var(--grey)}
+.publi{border:3px double var(--ink);padding:22px;text-align:center;background:var(--paper);position:relative}
+.publi-tag{font-family:'Oswald',sans-serif;font-size:7px;letter-spacing:.6em;text-transform:uppercase;color:var(--lgrey);position:absolute;top:5px;right:7px}
+.publi-ico{font-size:40px;display:block;margin-bottom:9px;filter:grayscale(1) contrast(1.3) brightness(.6)}
+.publi-tit{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;font-style:italic;margin-bottom:4px}
+.publi-sub{font-family:'Special Elite',cursive;font-size:11px;color:var(--grey);line-height:1.4;margin-bottom:9px}
+.publi-precio{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--red)}
+.publi-precio small{font-size:.5em;font-style:italic;color:var(--grey)}
+
+/* CHISTE */
+.chiste-bloque{display:grid;grid-template-columns:1fr 1fr;gap:0;border:2px solid var(--ink)}
+.ch-vin{border-right:2px solid var(--ink)}
+.vin-sc{min-height:340px;position:relative;overflow:hidden;background:var(--paper)}
+.vin-bg{position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0,transparent 27px,rgba(26,18,8,.06) 27px,rgba(26,18,8,.06) 28px)}
+.fig{position:absolute;display:flex;flex-direction:column;align-items:center}
+.fhead{width:36px;height:40px;background:var(--paper);border:2.5px solid var(--ink);border-radius:50% 50% 45% 45%;position:relative}
+.feye{position:absolute;top:12px;width:6px;height:6px;background:var(--ink);border-radius:50%}
+.feye.l{left:6px}.feye.r{right:6px}
+.fmouth{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:13px;height:0;border-bottom:2px solid var(--ink);border-radius:0 0 7px 7px}
+.fear{position:absolute;top:10px;width:7px;height:12px;background:var(--paper);border:2px solid var(--ink);border-radius:50%}
+.fear.l{left:-7px}.fear.r{right:-7px}
+.fhair{position:absolute;top:-5px;left:4px;right:4px;height:8px;background:var(--ink);border-radius:6px 6px 0 0}
+.fsombrero{position:absolute;top:-21px;left:-8px;right:-8px;height:15px;background:var(--ink);border-radius:2px}
+.fsombrero::before{content:'';position:absolute;bottom:-5px;left:-8px;right:-8px;height:5px;background:var(--ink);border-radius:1px}
+.fbigote{position:absolute;bottom:12px;left:7px;width:22px;height:6px;border-top:3px solid var(--ink);border-radius:50% 50% 0 0}
+.fbody{width:44px;height:54px;background:var(--paper);border:2.5px solid var(--ink);border-radius:4px;position:relative;margin-top:-1px}
+.fcorbata{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:9px;height:25px;background:var(--red);clip-path:polygon(30% 0%,70% 0%,85% 70%,50% 100%,15% 70%)}
+.fbrazo{position:absolute;width:6px;height:32px;background:var(--paper);border:2px solid var(--ink);border-radius:3px}
+.fbrazo.l{top:5px;left:-9px;transform:rotate(10deg);transform-origin:top center}
+.fbrazo.r{top:5px;right:-9px;transform:rotate(-10deg);transform-origin:top center}
+.fbrazo.esc{transform:rotate(55deg)!important;top:2px!important}
+.fpiernas{display:flex;gap:5px;margin-top:-1px}
+.fpierna{width:12px;height:42px;background:var(--ink);border-radius:2px}
+.fpie{width:17px;height:7px;background:var(--ink);border-radius:2px;margin-top:-2px}
+.boc{position:absolute;background:white;border:2px solid var(--ink);border-radius:7px;padding:6px 10px;z-index:10;max-width:140px}
+.boc p{font-family:'Special Elite',cursive;font-size:11px;color:var(--ink);line-height:1.3;text-align:center}
+.boc-tl{position:absolute;bottom:-12px;left:14px;width:0;height:0;border:7px solid transparent;border-top:12px solid var(--ink)}
+.boc-tl::after{content:'';position:absolute;top:-14px;left:-6px;border:6px solid transparent;border-top:11px solid white}
+.boc-tr{position:absolute;bottom:-12px;right:14px;width:0;height:0;border:7px solid transparent;border-top:12px solid var(--ink)}
+.boc-tr::after{content:'';position:absolute;top:-14px;left:-6px;border:6px solid transparent;border-top:11px solid white}
+.vin-firma{position:absolute;bottom:7px;right:10px;font-family:'Special Elite',cursive;font-size:9px;color:var(--lgrey);font-style:italic}
+.vin-cap{border-top:1px solid var(--ink);padding:8px;text-align:center;background:var(--paper2)}
+.vin-cap span{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--lgrey);font-weight:300}
+.ch-txt{padding:32px}
+.ch-drop{font-family:'Playfair Display',serif;font-size:84px;font-weight:900;color:var(--red);float:left;line-height:.78;margin-right:7px;margin-top:4px}
+.ch-intro{font-size:14px;line-height:1.8;color:var(--grey);margin-bottom:20px}
+.ch-intro strong{color:var(--ink)}
+.ch-sep{font-size:13px;color:var(--red);letter-spacing:.5em;text-align:center;margin:16px 0;clear:both}
+.dialogo{border-left:3px solid var(--red);padding-left:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+.d-l{display:flex;flex-direction:column;gap:2px}
+.d-q{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);font-weight:600}
+.d-d{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;font-weight:700;color:var(--ink);line-height:1.25}
+.d-remate .d-d{color:var(--red);font-size:17px}
+.ch-foot{border-top:1px solid var(--paper3);padding-top:13px}
+.ch-foot p{font-family:'Special Elite',cursive;font-size:10px;color:var(--lgrey);font-style:italic}
+.ch-foot strong{font-family:'Playfair Display',serif;font-style:italic;color:var(--red)}
+
+/* CARTAS */
+.cartas-wrap{border:2px solid var(--ink)}
+.carta{padding:22px 26px;border-bottom:1px solid var(--paper3)}
+.carta:last-child{border-bottom:none}
+.carta-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px}
+.carta-autor{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;font-style:italic}
+.carta-lugar{font-family:'Special Elite',cursive;font-size:10px;color:var(--lgrey);margin-top:2px}
+.carta-fecha{font-family:'Special Elite',cursive;font-size:10px;color:var(--lgrey)}
+.carta-txt{font-size:13px;line-height:1.75;color:var(--grey);font-style:italic;border-left:3px solid var(--paper3);padding-left:11px}
+.carta-txt em{color:var(--red);font-weight:700}
+
+/* PASATIEMPOS */
+.past-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:2px solid var(--ink)}
+.past-it{padding:22px;border-right:2px solid var(--ink)}
+.past-it:last-child{border-right:none}
+.past-tit{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;font-style:italic;border-bottom:1px solid var(--paper3);padding-bottom:7px;margin-bottom:11px}
+.past-body{font-size:13px;line-height:1.7;color:var(--grey)}
+.past-body strong{color:var(--red)}.past-body em{font-style:italic;color:var(--ink)}
+/* crucigrama */
+.cruci{display:grid;gap:2px;margin:10px 0}
+.cruci-5{grid-template-columns:repeat(5,28px)}
+.cruci-6{grid-template-columns:repeat(6,28px)}
+.cc{width:28px;height:28px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:10px;font-weight:500;background:var(--paper);position:relative}
+.cc.negro{background:var(--ink);border-color:var(--ink)}
+.cc .cn{position:absolute;top:1px;left:2px;font-size:7px;color:var(--lgrey)}
+
+/* HORÓSCOPO */
+.horo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:2px solid var(--ink)}
+.horo-it{padding:16px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transition:background .25s;cursor:none}
+.horo-it:hover{background:var(--paper2)}
+.horo-it:nth-child(4n){border-right:none}
+.horo-it:nth-child(n+9){border-bottom:none}
+.horo-sig{font-size:20px;display:block;margin-bottom:4px}
+.horo-nom{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:4px}
+.horo-txt{font-size:11px;line-height:1.6;color:var(--grey);font-style:italic}
+.horo-pie{text-align:center;padding:12px;border-top:1px solid var(--paper3);background:var(--paper2)}
+.horo-pie p{font-family:'Special Elite',cursive;font-size:10px;color:var(--lgrey);font-style:italic}
+
+/* ── PANEL EDITOR ── */
+#editor-modal{position:fixed;inset:0;z-index:9000;background:rgba(26,18,8,.85);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#editor-modal.open{display:flex}
+.editor-box{background:var(--paper);border:3px solid var(--ink);width:min(820px,95vw);max-height:90vh;overflow-y:auto;position:relative}
+.editor-head{background:var(--ink);padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
+.editor-head h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;font-style:italic;color:var(--paper)}
+.editor-head span{font-family:'Special Elite',cursive;font-size:11px;color:rgba(240,232,208,.4)}
+.editor-close{background:var(--red);border:none;color:var(--paper);width:32px;height:32px;font-size:18px;cursor:pointer;font-weight:900;transition:background .2s}
+.editor-close:hover{background:var(--red2)}
+.editor-login{padding:36px 28px;text-align:center}
+.editor-login h3{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;margin-bottom:20px}
+.editor-login input{width:100%;border:2px solid var(--ink);background:var(--paper);font-family:'Special Elite',cursive;font-size:14px;padding:10px 14px;margin-bottom:12px;outline:none;display:block}
+.editor-login input:focus{border-color:var(--red)}
+.editor-login button{background:var(--red);color:var(--paper);border:none;padding:12px 32px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.4em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:background .2s}
+.editor-login button:hover{background:var(--red2)}
+.editor-login .err{font-family:'Special Elite',cursive;font-size:12px;color:var(--red);margin-top:8px;display:none}
+.editor-body{padding:24px 28px;display:none}
+.editor-body.open{display:block}
+.editor-tabs{display:flex;border-bottom:2px solid var(--ink);margin-bottom:20px}
+.editor-tab{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;padding:9px 16px;cursor:pointer;border-right:1px solid var(--paper3);font-weight:500;transition:background .2s}
+.editor-tab:hover,.editor-tab.activa{background:var(--ink);color:var(--paper)}
+.editor-tab-pane{display:none}.editor-tab-pane.activa{display:block}
+.editor-field{margin-bottom:16px}
+.editor-field label{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);font-weight:600;display:block;margin-bottom:5px}
+.editor-field input,.editor-field textarea,.editor-field select{width:100%;border:2px solid var(--paper3);background:var(--paper);font-family:'Libre Baskerville',serif;font-size:13px;padding:9px 12px;outline:none;resize:vertical;transition:border-color .2s}
+.editor-field input:focus,.editor-field textarea:focus,.editor-field select:focus{border-color:var(--red)}
+.editor-field textarea{min-height:100px}
+.editor-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.editor-actions{display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid var(--paper3)}
+.btn-guardar{background:var(--forest);color:var(--paper);border:none;padding:11px 28px;font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:background .2s}
+.btn-guardar:hover{background:#2d4530}
+.btn-cancelar{background:var(--paper3);color:var(--ink);border:2px solid var(--ink);padding:11px 24px;font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:background .2s}
+.btn-cancelar:hover{background:var(--paper2)}
+.editor-lista{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.editor-art-item{border:1px solid var(--paper3);padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .2s;background:var(--paper)}
+.editor-art-item:hover{background:var(--paper2);border-color:var(--ink)}
+.editor-art-item .it-sec{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);font-weight:600;flex-shrink:0}
+.editor-art-item .it-tit{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;font-weight:700;flex:1}
+.editor-art-item .it-edit{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.3em;color:var(--lgrey);flex-shrink:0}
+.editor-art-item:hover .it-edit{color:var(--red)}
+.ok-msg{background:var(--forest);color:var(--paper);padding:10px 16px;font-family:'Special Elite',cursive;font-size:12px;margin-bottom:14px;display:none}
+.ok-msg.show{display:block}
+
+/* FOOTER */
+footer{border-top:3px solid var(--ink);background:var(--paper2)}
+.f-head{padding:16px 36px;border-bottom:1px solid var(--paper3);display:flex;justify-content:center;align-items:center;gap:16px}
+.fh-rule{flex:1;height:1px;background:var(--paper3)}
+.fh-tit{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;font-style:italic}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:1px solid var(--paper3)}
+.fc{padding:32px 28px;border-right:1px solid var(--paper3)}
+.fc:last-child{border-right:none}
+.fc h4{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--red);margin-bottom:16px;padding-bottom:6px;border-bottom:1px solid var(--paper3);font-weight:600}
+.fc ul{list-style:none}.fc li{margin-bottom:8px}
+.fc a{font-family:'Libre Baskerville',serif;font-size:12px;color:var(--grey);text-decoration:none;cursor:none}
+.fc a:hover{color:var(--red)}
+.fc .brand{font-family:'Playfair Display',serif;font-size:19px;font-weight:900;font-style:italic;color:var(--ink);margin-bottom:7px;display:block}
+.fc .brand-sub{font-family:'Special Elite',cursive;font-size:11px;color:var(--lgrey);line-height:1.6}
+.fbot{padding:12px 36px;display:flex;justify-content:space-between;align-items:center}
+.fcopy{font-family:'Special Elite',cursive;font-size:11px;color:var(--lgrey)}
+.fsoc{display:flex;gap:20px}
+.fsoc a{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--lgrey);text-decoration:none;cursor:none}
+.fsoc a:hover{color:var(--red)}
+
+/* REVEAL */
+.r{opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.25,.46,.45,.94),transform .8s cubic-bezier(.25,.46,.45,.94)}
+.r.in{opacity:1;transform:translateY(0)}
+.r1{transition-delay:.1s}.r2{transition-delay:.2s}.r3{transition-delay:.3s}
+.mb32{margin-bottom:32px}.mt32{margin-top:32px}
+</style>
+</head>
+
+<body>
+
+<div id="dot"></div>
+<div id="ring"></div>
+
+<div id="loader">
+  <div class="ld-wrap">
+    <div class="ld-eye">Diario de Opinión e Ironía · Fundado en 1931</div>
+    <div class="ld-tit">El Crepúsculo Ibérico</div>
+    <div class="ld-sub">«El único periódico que dice la verdad sin saber cuál es»</div>
+    <div class="ld-bar"></div>
+  </div>
+</div>
+
+<!-- PANEL EDITOR -->
+<div id="editor-modal">
+  <div class="editor-box">
+    <div class="editor-head">
+      <h2>Panel de Redacción</h2>
+      <span>El Crepúsculo Ibérico · Acceso Restringido</span>
+      <button class="editor-close" onclick="cerrarEditor()">✕</button>
+    </div>
+    <div class="editor-login" id="editor-login">
+      <h3>Acceso de Redactores</h3>
+      <input type="password" id="editor-pass" placeholder="Contraseña de redacción" onkeydown="if(event.key==='Enter')loginEditor()"/>
+      <button onclick="loginEditor()">Entrar a la Redacción</button>
+      <div class="err" id="editor-err">Contraseña incorrecta. Vuelva mañana.</div>
+    </div>
+    <div class="editor-body" id="editor-body">
+      <div class="ok-msg" id="ok-msg">✓ Cambios guardados correctamente en el periódico.</div>
+      <div class="editor-tabs">
+        <div class="editor-tab activa" onclick="edTab('articulos')">Artículos</div>
+        <div class="editor-tab" onclick="edTab('nuevo')">Nuevo Artículo</div>
+        <div class="editor-tab" onclick="edTab('pasatiempos')">Pasatiempos</div>
+        <div class="editor-tab" onclick="edTab('chistes')">Chistes</div>
+        <div class="editor-tab" onclick="edTab('cartas')">Cartas</div>
+      </div>
+      <!-- TAB: ARTÍCULOS -->
+      <div class="editor-tab-pane activa" id="etab-articulos">
+        <p style="font-family:'Special Elite',cursive;font-size:12px;color:var(--lgrey);margin-bottom:14px">Haga clic en un artículo para editarlo:</p>
+        <div class="editor-lista" id="editor-lista"></div>
+      </div>
+      <!-- TAB: NUEVO ARTÍCULO -->
+      <div class="editor-tab-pane" id="etab-nuevo">
+        <div class="editor-row">
+          <div class="editor-field"><label>Sección</label>
+            <select id="n-sec"><option>Nacional</option><option>Cultura</option><option>Sociedad</option><option>Opinión</option></select>
+          </div>
+          <div class="editor-field"><label>Firma del autor</label><input id="n-autor" placeholder="Nombre Apellido"/></div>
+        </div>
+        <div class="editor-field"><label>Titular</label><input id="n-tit" placeholder="El titular del artículo"/></div>
+        <div class="editor-field"><label>Sumario (frase en cursiva)</label><input id="n-sum" placeholder="Una frase que resume el artículo"/></div>
+        <div class="editor-field"><label>Cuerpo del artículo</label><textarea id="n-body" rows="8" placeholder="Texto completo del artículo..."></textarea></div>
+        <div class="editor-field"><label>Cita destacada (sidebar)</label><input id="n-cita" placeholder="Una frase memorable del artículo"/></div>
+        <div class="editor-actions">
+          <button class="btn-guardar" onclick="nuevoArticulo()">Publicar Artículo</button>
+          <button class="btn-cancelar" onclick="limpiarNuevo()">Limpiar</button>
+        </div>
+      </div>
+      <!-- TAB: PASATIEMPOS -->
+      <div class="editor-tab-pane" id="etab-pasatiempos">
+        <p style="font-family:'Special Elite',cursive;font-size:12px;color:var(--lgrey);margin-bottom:16px">Edite los pasatiempos. Cambian automáticamente cada día. Añada varios separados por | para rotarlos.</p>
+        <div class="editor-field"><label>Acertijo del día (uno por línea con su solución entre paréntesis)</label>
+          <textarea id="ed-acertijo" rows="6"></textarea>
+        </div>
+        <div class="editor-field"><label>Trabalenguas (separados por |)</label>
+          <textarea id="ed-trabal" rows="4"></textarea>
+        </div>
+        <div class="editor-field"><label>Pregunta del test (con opciones a/b/c separadas por ;)</label>
+          <textarea id="ed-test" rows="4"></textarea>
+        </div>
+        <div class="editor-actions">
+          <button class="btn-guardar" onclick="guardarPasatiempos()">Guardar Pasatiempos</button>
+        </div>
+      </div>
+      <!-- TAB: CHISTES -->
+      <div class="editor-tab-pane" id="etab-chistes">
+        <p style="font-family:'Special Elite',cursive;font-size:12px;color:var(--lgrey);margin-bottom:16px">Añada chistes. Se muestran rotando por día. Formato: Personaje1|frase1|Personaje2|frase2|...</p>
+        <div id="chistes-lista"></div>
+        <div style="border:2px solid var(--paper3);padding:18px;margin-top:12px">
+          <p style="font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);margin-bottom:12px">Nuevo chiste</p>
+          <div class="editor-field"><label>Título</label><input id="ch-tit" placeholder="El empleado impuntual"/></div>
+          <div class="editor-field"><label>Introducción</label><textarea id="ch-intro" rows="2" placeholder="Había una vez..."></textarea></div>
+          <div class="editor-field"><label>Diálogo (Personaje|frase|Personaje|frase|...|REMATE|frase final)</label><textarea id="ch-dial" rows="4" placeholder="Doctor|¿Fuma usted?|Paciente|Sólo los que me roban|REMATE|Igual que usted."></textarea></div>
+          <div class="editor-actions">
+            <button class="btn-guardar" onclick="addChiste()">Añadir Chiste</button>
+          </div>
+        </div>
+      </div>
+      <!-- TAB: CARTAS -->
+      <div class="editor-tab-pane" id="etab-cartas">
+        <div id="cartas-lista"></div>
+        <div style="border:2px solid var(--paper3);padding:18px;margin-top:12px">
+          <p style="font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);margin-bottom:12px">Nueva carta</p>
+          <div class="editor-row">
+            <div class="editor-field"><label>Autor</label><input id="ca-autor" placeholder="Doña Remedios Pajares"/></div>
+            <div class="editor-field"><label>Lugar</label><input id="ca-lugar" placeholder="Albacete"/></div>
+          </div>
+          <div class="editor-field"><label>Texto</label><textarea id="ca-txt" rows="4"></textarea></div>
+          <div class="editor-actions">
+            <button class="btn-guardar" onclick="addCarta()">Publicar Carta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-strip">
+    <span>☎ Redacción: 958 00 00 00</span>
+    <strong>✦ EDICIÓN ESPECIAL DE PRIMAVERA · <span id="editor-trigger" title="..." ondblclick="abrirEditor()">AÑO XCV</span> ✦</strong>
+    <span>Suscripción: 12 pesetas/año</span>
+  </div>
+  <div class="nav-top">
+    <span class="nav-date" id="nav-fecha"></span>
+    <span class="nav-motto">«El único periódico que dice la verdad sin saber cuál es»</span>
+    <span class="nav-price">Granada · 2 pesetas</span>
+  </div>
+  <div class="nav-main">
+    <div class="nav-secs">
+      <a href="#" onclick="return ir('portada')" id="nav-portada" class="activa">Portada</a>
+      <a href="#" onclick="return ir('nacional')" id="nav-nacional">Nacional</a>
+      <a href="#" onclick="return ir('cultura')" id="nav-cultura">Cultura</a>
+      <a href="#" onclick="return ir('sociedad')" id="nav-sociedad">Sociedad</a>
+    </div>
+    <div class="masthead">
+      <span class="masthead-title" onclick="return ir('portada')">El Crepúsculo Ibérico</span>
+      <span class="masthead-sub">Diario Independiente de Granada · Est. MCMXXXI</span>
+    </div>
+    <div class="nav-secs">
+      <a href="#" onclick="return ir('opinion')" id="nav-opinion">Opinión</a>
+      <a href="#" onclick="return ir('pasatiempos')" id="nav-pasatiempos">Pasatiempos</a>
+      <a href="#" onclick="return ir('cartas')" id="nav-cartas">Cartas</a>
+      <a href="#" onclick="return ir('humor')" id="nav-humor" class="hot">Humor</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ PORTADA ══ -->
+<div class="pagina activa" id="pag-portada">
+  <div class="pag-inner">
+    <div class="portada-dateline">
+      <span class="portada-tag">Última Hora</span>
+      <span class="portada-dtxt">Edición Matutina · Impreso en Granada · Tirada: 40.000 ejemplares</span>
+    </div>
+    <span class="rule-doble"></span>
+    <h1 class="gran-titular">
+      <span class="gt-line"><span>España</span></span>
+      <span class="gt-line"><span>Continúa</span></span>
+      <span class="gt-line"><span>Existiendo</span></span>
+      <span class="gt-line"><span>— Con Notables Dificultades —</span></span>
+    </h1>
+    <div class="pcols">
+      <div class="pcol">
+        <p class="col-lbl">Editorial</p>
+        <p class="col-body dropcap">Tras exhaustiva investigación, confirmamos que <em>el país sigue en su sitio</em>, aunque con inclinación al oeste que los científicos atribuyen al peso acumulado de los burócratas.</p>
+        <br/><p class="col-body">Los ciudadanos han respondido con la mezcla de <strong>resignación y sobremesa</strong> que caracteriza a nuestra noble nación.</p>
+      </div>
+      <div class="col-div"></div>
+      <div class="pcol">
+        <p class="col-subtit">«El Gobierno Anuncia que Todo Va Bien por Décima Vez Consecutiva, Batiendo su Propio Récord»</p>
+        <p class="col-body">Fuentes gubernamentales declararon que la situación es «plenamente satisfactoria», generando desconcierto entre la población, que tiene ojos.</p>
+        <div class="portada-illus">
+          <div class="portada-illus-img">🏛️</div>
+          <p class="portada-illus-cap">El Congreso, fotografiado en uno de sus días de mayor actividad legislativa</p>
+        </div>
+      </div>
+      <div class="col-div"></div>
+      <div class="pcol">
+        <p class="col-lbl">En este número</p>
+        <div class="col-sum" id="portada-indice"></div>
+      </div>
+    </div>
+  </div>
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <div class="ti">Nacional</div><div class="ti">Internacional</div><div class="ti">Cultura</div><div class="ti">Sociedad</div><div class="ti">Economía</div><div class="ti">Deportes</div><div class="ti">Opinión</div><div class="ti">Pasatiempos</div>
+      <div class="ti">Nacional</div><div class="ti">Internacional</div><div class="ti">Cultura</div><div class="ti">Sociedad</div><div class="ti">Economía</div><div class="ti">Deportes</div><div class="ti">Opinión</div><div class="ti">Pasatiempos</div>
+    </div>
+  </div>
+  <div class="scue">
+    <div class="scue-line"></div>
+    <span class="scue-txt">Seleccione una sección para continuar leyendo</span>
+    <div class="scue-line"></div>
+  </div>
+</div>
+
+<!-- ══ NACIONAL ══ -->
+<div class="pagina" id="pag-nacional">
+  <div class="pag-inner">
+    <div class="sec-head r"><div class="sec-head-line"></div><span class="sec-head-orn">✦</span><span class="sec-head-tit">Noticias Nacionales</span><span class="sec-head-orn">✦</span><div class="sec-head-line"></div><span class="sec-head-num">Página III</span></div>
+    <div id="grid-nacional"></div>
+  </div>
+</div>
+
+<!-- ══ CULTURA ══ -->
+<div class="pagina" id="pag-cultura">
+  <div class="pag-inner">
+    <div class="sec-head r"><div class="sec-head-line"></div><span class="sec-head-orn">✦</span><span class="sec-head-tit">Cultura, Letras &amp; Artes</span><span class="sec-head-orn">✦</span><div class="sec-head-line"></div><span class="sec-head-num">Página VII</span></div>
+    <div id="grid-cultura"></div>
+  </div>
+</div>
+
+<!-- ══ SOCIEDAD ══ -->
+<div class="pagina" id="pag-sociedad">
+  <div class="pag-inner">
+    <div class="sec-head r"><div class="sec-head-line"></div><span class="sec-head-orn">✦</span><span class="sec-head-tit">Sociedad &amp; Costumbres</span><span class="sec-head-orn">✦</span><div class="sec-head-line"></div><span class="sec-head-num">Página XI</span></div>
+    <div id="grid-sociedad"></div>
+  </div>
+</div>
+
+<!-- ══ OPINIÓN ══ -->
+<div class="pagina" id="pag-opinion">
+  <div class="pag-inner">
+    <div class="sec-head r"><div class="sec-head-line"></div><span class="sec-head-orn">✦</span><span class="sec-head-tit">Opinión, Tribuna &amp; Editorial</span><span class="sec-head-orn">✦</span><div class="sec-head-line"></div><span class="sec-head-num">Página V</span></div>
+    <div id="grid-opinion"></div>
+    <div class="mt32 r">
+      <div class="esquela">
+        <span class="esq-cruz">✝</span>
+        <p class="esq-nom">El Sentido Común</p>
+        <p class="esq-fecha">† Falleció sin fecha conocida · Llevaba años enfermo</p>
+        <p class="esq-txt">Quienes le conocieron recuerdan sus años mozos con nostalgia. Le sobreviven: la burocracia, las redes sociales y varias comisiones de estudio sobre su desaparición.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ARTÍCULO COMPLETO ══ -->
+<div class="pagina" id="pag-articulo">
+  <div class="pag-inner" id="articulo-contenido"></div>
+</div>
+
+<!-- ══ HUMOR ══ -->
+<div class="pagina" id="pag-humor">
+  <div class="pag-inner">
+    <div class="sec-head r"><div class="sec-head-line"></div><span class="sec-head-orn">✦</span><span class="sec-head-tit">Humor Gráfico · La Codorniz</span><span class="sec-head-orn">✦</span><div class="sec-head-line"></div><span class="sec-head-num">Página XVIII</span></div>
+    <div id="humor-contenido"></div>
+  </div>
+</div>
+
+<!-- ══ CARTAS ══ -->
+<div class="pagina" id="pag-cartas">
+  <div class="pag-inner">
+    <div class="sec-head r"><div class="sec-head-line"></div><span class="sec-head-orn">✦</span><span class="sec-head-tit">Cartas al Director</span><span class="sec-head-orn">✦</span><div class="sec-head-line"></div><span class="sec-head-num">Página XV</span></div>
+    <div class="cartas-wrap r" id="cartas-contenido"></div>
+    <div style="text-align:right;padding:10px 22px;border:2px solid var(--ink);border-top:none;background:var(--paper2)" class="r r1">
+      <p style="font-family:'Special Elite',cursive;font-size:11px;color:var(--lgrey);font-style:italic">La Dirección agradece las cartas y advierte que no puede comprometerse a leerlas todas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PASATIEMPOS ══ -->
+<div class="pagina" id="pag-pasatiempos">
+  <div class="pag-inner">
+    <div class="sec-head r"><div class="sec-head-line"></div><span class="sec-head-orn">✦</span><span class="sec-head-tit">Pasatiempos &amp; Entretenimientos</span><span class="sec-head-orn">✦</span><div class="sec-head-line"></div><span class="sec-head-num">Página XVII</span></div>
+    <div id="pasatiempos-contenido"></div>
+    <div class="mt32">
+      <div class="sec-head r"><div class="sec-head-line"></div><span class="sec-head-orn">✦</span><span class="sec-head-tit">Horóscopo Semanal · Por Madame Pepiña</span><span class="sec-head-orn">✦</span><div class="sec-head-line"></div></div>
+      <div id="horoscopo-contenido"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-head"><div class="fh-rule"></div><span class="fh-tit">El Crepúsculo Ibérico</span><div class="fh-rule"></div></div>
+  <div class="fg">
+    <div class="fc"><span class="brand">El Crepúsculo Ibérico</span><p class="brand-sub">Diario independiente de Granada fundado en 1931. Noventa y cinco años contando lo que pasa, aunque no siempre sepamos qué es lo que pasa.</p></div>
+    <div class="fc"><h4>Secciones</h4><ul>
+      <li><a href="#" onclick="return ir('portada')">Portada</a></li>
+      <li><a href="#" onclick="return ir('nacional')">Nacional</a></li>
+      <li><a href="#" onclick="return ir('cultura')">Cultura</a></li>
+      <li><a href="#" onclick="return ir('sociedad')">Sociedad</a></li>
+      <li><a href="#" onclick="return ir('opinion')">Opinión</a></li>
+    </ul></div>
+    <div class="fc"><h4>Más</h4><ul>
+      <li><a href="#" onclick="return ir('humor')">Humor</a></li>
+      <li><a href="#" onclick="return ir('pasatiempos')">Pasatiempos</a></li>
+      <li><a href="#" onclick="return ir('cartas')">Cartas</a></li>
+    </ul></div>
+    <div class="fc"><h4>Redacción</h4><ul>
+      <li><a href="#">Don Evaristo Cañizares</a></li>
+      <li><a href="#">Madame Pepiña</a></li>
+      <li><a href="#">☎ 958 00 00 00</a></li>
+    </ul></div>
+  </div>
+  <div class="fbot">
+    <p class="fcopy">© 2026 El Crepúsculo Ibérico · «El único periódico que dice la verdad sin saber cuál es»</p>
+    <div class="fsoc"><a href="#">Instagram</a><a href="#">Twitter</a></div>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════
+//  BASE DE DATOS DEL PERIÓDICO (localStorage)
+// ══════════════════════════════════════════════
+const PASS = 'crepusculo1931'; // ← CAMBIA ESTO
+
+function cargarDatos() {
+  const def = {
+    articulos: [
+      {id:1, sec:'Nacional', autor:'R. Bermúdez', cargo:'Corresponsal Parlamentario', fecha:'11 mar.',
+       tit:'El Parlamento Aprueba por Unanimidad No Ponerse de Acuerdo en Nada',
+       sum:'«Es un logro histórico», declaró el portavoz, visiblemente emocionado',
+       cuerpo:'En una sesión que duró catorce horas y consumió veintidós cajas de bolígrafos, el hemiciclo alcanzó el acuerdo más amplio de la legislatura: el de que no hay acuerdo posible. La votación fue de 350 a 0.\n\nLos diputados se felicitaron mutuamente con la emoción propia de quien acaba de hacer algo importante sin recordar muy bien qué era. El portavoz compareció ante los medios con lágrimas en los ojos y la voz entrecortada, lo que los analistas interpretaron como señal de que algo relevante había ocurrido, aunque nadie supo precisar el qué.\n\nFuentes del hemiciclo indicaron que el próximo debate versará sobre si debatir tanto es bueno para la democracia, cuestión sobre la que ya existe un borrador de propuesta de ponencia de comisión.',
+       cita:'«350 votos a favor de no ponerse de acuerdo. Histórico.»'},
+      {id:2, sec:'Nacional', autor:'M. Solano', cargo:'Redacción Central', fecha:'10 mar.',
+       tit:'Candidato Promete Todo lo Mismo que la Vez Anterior, pero con Más Entusiasmo',
+       sum:'El programa, impreso en papel de mayor gramaje, es idéntico al de 2019',
+       cuerpo:'El aspirante compareció ante sus seguidores con un programa «completamente renovado» que, según los analistas, es idéntico al de 2019, aunque impreso en papel de mayor gramaje y con una tipografía ligeramente más optimista.\n\nLos sondeos le dan entre un 23 y un 41 por ciento, que es lo que se llama un margen de error útil. El candidato, consultado al respecto, señaló que los números son «orientativos» y que lo importante es «la ilusión del proyecto».\n\nEn declaraciones a este periódico, reconoció que algunas de las propuestas del programa son «ambiciosas», lo cual, en lenguaje político, equivale a decir que no serán implementadas.',
+       cita:'«La ilusión del proyecto», dijo el candidato, sin especificar cuál.'},
+      {id:3, sec:'Cultura', autor:'C. Vela', cargo:'Crítica Literaria', fecha:'11 mar.',
+       tit:'Escritor Termina Novela Tras Doce Años; Editor ya no Recuerda Haberle Dado Contrato',
+       sum:'La obra, de 847 páginas, trata sobre la memoria y un hombre que espera',
+       cuerpo:'Don Eusebio Palencia, novelista de Jaén, ha entregado por fin su obra magna de 847 páginas. El editor consultado respondió al teléfono con un prolongado silencio antes de decir: «¿Palencia? ¿El de la bufanda?».\n\nLa novela trata sobre la memoria, el tiempo perdido y un hombre que espera. Los críticos la han calificado de «valiente», que es lo que se dice cuando no se ha leído.\n\nEl autor, en la presentación, agradeció a su mujer «la paciencia infinita», a su agente «los correos sin respuesta» y a su editor «la confianza que quizás algún día pueda demostrar».',
+       cita:'«La obra de una vida», dijo el autor. Su editor preguntó: «¿Qué obra?»'},
+      {id:4, sec:'Cultura', autor:'I. Ramos', cargo:'Crítica Teatral', fecha:'8 mar.',
+       tit:'La Función Empezó Tarde Pero Terminó a su Hora',
+       sum:'Reseña de la obra que dividió a la crítica entre los que la encontraron larga y los que se durmieron antes de opinar',
+       cuerpo:'El Teatro Principal acogió el estreno de esta propuesta escénica que su director define como «exploración del absurdo cotidiano» y el público define como «larga».\n\nEl protagonista permanece sentado durante noventa minutos preguntándose si debe levantarse. La mayoría del público compartió la duda hacia el cuarto de hora.\n\nTres personas aplaudieron al final con convicción genuina. Quince lo hicieron por inercia. El resto esperó a ver qué hacían los de al lado, que también esperaban. Este periódico considera que la obra refleja, quizá involuntariamente, la condición humana ante la duda.',
+       cita:'«El público se preguntó lo mismo que el protagonista», dijo el director.'},
+      {id:5, sec:'Sociedad', autor:'T. Alcázar', cargo:'Crónica Social', fecha:'9 mar.',
+       tit:'El Bar de la Esquina Cumple Cien Años sin que Nadie Sepa Cómo',
+       sum:'El Café Iberia ha sobrevivido a dos guerras, cuatro constituciones y dieciséis reformas del IVA',
+       cuerpo:'El Café Iberia ha sobrevivido a dos guerras, cuatro constituciones y dieciséis reformas del IVA. Su propietario actual atribuye la longevidad del negocio a «no preguntar demasiado y el café con leche a un euro veinte».\n\nEl establecimiento ha sido declarado Bien de Interés Cultural, lo que significa que ahora tarda más en reformarse. Los habituales, consultados por este periódico, señalaron que «siempre ha estado ahí» y que «ojalá dure otros cien años», aunque reconocieron que el café «ha bajado un poco» desde que se jubiló el anterior dueño.\n\nLa celebración del centenario consistió en una bandeja de pastas y un cartel escrito a mano que decía «100 años».',
+       cita:'«No preguntamos demasiado. Esa es la clave», dijo el propietario.'},
+      {id:6, sec:'Opinión', autor:'D. Evaristo Cañizares', cargo:'Director · El Crepúsculo Ibérico', fecha:'Editorial',
+       tit:'Sobre la Costumbre Española de Opinar antes de Informarse',
+       sum:'Reflexión de urgencia por el director, que reconoce practicarla él también',
+       cuerpo:'Existe en nuestro país una tradición tan arraigada como el cocido: la de tener opinión formadísima sobre cualquier asunto antes de haber leído siquiera el titular. Esta práctica, que otros pueblos tacharían de ignorancia, nosotros la llamamos intuición mediterránea y la cultivamos con orgullo.\n\nEl fenómeno se ha intensificado con las redes sociales, donde es posible opinar, compartir y enfadarse en menos tiempo del que llevaría enterarse de qué trata el asunto. Este periódico, que lleva noventa y cinco años informando, observa el fenómeno con la mezcla de tristeza y resignación propia de quien lleva décadas trabajando en el sector.\n\nEscribimos estas líneas siendo plenamente conscientes de que serán compartidas por personas que no las habrán leído. Así es como funciona, y así seguirá siendo.',
+       cita:'«Compartidas por personas que no las habrán leído.»'}
+    ],
+    chistes: [
+      {id:1, tit:'La Consulta', intro:'El Doctor Bermúdez recibió a su nuevo paciente, un señor de aspecto considerablemente fumado, con la profesionalidad de quien lleva treinta años haciéndose las mismas preguntas.',
+       dial:[['Doctor','¿Cuánto fuma usted al día?'],['Paciente','Sólo los cigarros que me roban.'],['Doctor','¿Y bebe?'],['Paciente','Sólo el vino que me invitan.'],['Doctor','¿Y trabaja?'],['REMATE','Sólo cuando no hay más remedio, doctor. Igual que usted.']],
+       firma:'Mingote · 1954'},
+      {id:2, tit:'La Biblioteca', intro:'Un señor muy serio entra en la biblioteca municipal de su pueblo con paso decidido y semblante de hambre.',
+       dial:[['Señor','Póngame un bocadillo de jamón y una cerveza.'],['Bibliotecaria','Señor, esto es una biblioteca.'],['Señor','(susurrando)',''],['REMATE','Perdone. Un bocadillo de jamón y una cerveza.']],
+       firma:'Chumy Chúmez · 1961'},
+      {id:3, tit:'El Empleado Impuntual', intro:'Don Anselmo Cuéllar, director general de Manufacturas Ibéricas S.A., recibió aquella mañana a su empleado más impuntual.',
+       dial:[['Jefe','¿Por qué llegó usted tarde hoy?'],['Empleado','Me resbalé en la ducha, señor.'],['Jefe','¿Y eso le llevó una hora?'],['REMATE','No señor. Lo que me llevó una hora fue decidir si contárselo o inventarme otra cosa. Queda usted ascendido. Aquí necesitamos hombres que piensen.']],
+       firma:'Perich · 1967'},
+      {id:4, tit:'El Optimista y el Pesimista', intro:'Un optimista y un pesimista se asoman por la ventana un lunes por la mañana.',
+       dial:[['Optimista','¡Qué hermoso amanecer!'],['REMATE','Sí, pero luego viene el martes.']],
+       firma:'Del archivo · 1958'}
+    ],
+    cartas: [
+      {id:1, autor:'Doña Remedios Pajares Cañizal', lugar:'Albacete', fecha:'7 de marzo',
+       txt:'Muy señor mío: Llevo veinte años leyendo este periódico y nunca había escrito. Lo hago hoy para decirles que el crucigrama del jueves tenía un error en la 14 vertical. La respuesta correcta es AZAHAR, no AZABAR. Atentamente y sin más.'},
+      {id:2, autor:'Don Hilario Montesinos', lugar:'Valladolid', fecha:'8 de marzo',
+       txt:'Estimada dirección: Me dirijo a ustedes para protestar por el artículo del martes, que consideré excesivamente optimista. En este país no hay motivo para tanto entusiasmo. Con el debido respeto y sin perder la esperanza, aunque cada año me cuesta más.'},
+      {id:3, autor:'Un Lector Anónimo', lugar:'Prefiero no decir', fecha:'9 de marzo',
+       txt:'Sólo quería decir que el horóscopo de la semana pasada acertó todo. No sé cómo lo hacen. Me da un poco de miedo. ¿Tienen mi dirección? Espero que no.'},
+      {id:4, autor:'La Redacción', lugar:'Granada', fecha:'Nota oficial',
+       txt:'Al lector anónimo: No tenemos su dirección. Madame Pepiña tampoco la tiene, que sepamos. La adivina del horóscopo ejerce desde 1968 con idéntica inexactitud, lo cual consideramos una forma de consistencia admirable.'}
+    ],
+    pasatiempos: {
+      acertijos: [
+        'Soy redondo, a veces frío, a veces caliente. Me desean por la mañana, me olvidan al mediodía y me echan de menos a las cuatro.(El café con leche)',
+        'Cuanto más grande soy, menos se me ve.(La oscuridad. Y también el sueldo, pero eso es otro acertijo.)',
+        'Entro por la puerta sin que nadie me llame, me quedo sin que nadie me invite y me voy sin decir adiós.(El cuñado. En algunos hogares, también el frío.)',
+        'Tengo ciudades sin casas, montañas sin árboles y agua sin peces. ¿Qué soy?(Un mapa. Aunque en este país también podría ser un presupuesto.)',
+        'Siempre delante de ti pero nunca la puedes ver.(Tu nariz. O el futuro. Depende de qué tan optimista seas.)'
+      ],
+      trabalenguas: [
+        'El burócrata burocrateaba tan burocráticamante que el más hábil burócrata que le burocratease buen burócrata sería.',
+        'El ministro ministró tan ministralmente que el más mínimo ministro que le ministrara buen ministro resultaría.',
+        'Tres tristes trámites tramitaban tres trámites tristes; tan tristemente tramitaban que nadie sabía cuándo acabarían.',
+        'Si el sastre del rey cose trajes al revés, ¿en qué sastre del rey coserá el revés de los trajes?'
+      ],
+      tests: [
+        '¿Qué hace usted cuando el cajero le da dinero de más?;a) Lo devuelvo inmediatamente;b) Espero a ver si me lo cobran;c) Me pregunto en qué país vivo — Si respondió (c) está leyendo el periódico correcto.',
+        '¿Qué hace usted en una reunión de trabajo muy larga?;a) Tomo notas activamente;b) Pienso en la comida;c) Calculo el coste por hora de cada asistente — Si respondió (c) tiene madera de director general.',
+        '¿Cómo reacciona ante una obra en la calle?;a) Me desvío con calma;b) Me quejo en redes;c) Compruebo si sigue ahí desde 2019 — Si respondió (c) es usted un veterano de la ciudad.'
+      ]
+    },
+    horoscopo: [
+      {sig:'♈',nom:'Aries',txt:'Esta semana evite tomar decisiones importantes. O tómelas, da igual, el resultado será el mismo. Marte en su casa indica energía. Su casa, sin embargo, necesita limpieza.'},
+      {sig:'♉',nom:'Tauro',txt:'Alguien le dirá algo que le hará pensar. Intente no pensarlo demasiado, que es peor. Venus le sonríe. Devuélvale la sonrisa con discreción.'},
+      {sig:'♊',nom:'Géminis',txt:'Semana de contrastes. El lunes fatal, el martes regular, el miércoles tolerable y el fin de semana ya veremos. La constancia es una virtud que usted no tiene.'},
+      {sig:'♋',nom:'Cáncer',txt:'Los astros le sonríen. Qué se le va a hacer, hay gustos para todo. Una persona de su entorno tiene un secreto. Usted también, así que en paz.'},
+      {sig:'♌',nom:'Leo',txt:'Recibirá noticias de alguien que no esperaba. Responda con calma, especialmente si es su banco quien llama.'},
+      {sig:'♍',nom:'Virgo',txt:'Júpiter indica prosperidad. Saturno indica lo contrario. Uno de los dos tiene razón. Lo averiguará el viernes.'},
+      {sig:'♎',nom:'Libra',txt:'Semana ideal para reflexionar sobre si reflexionar demasiado no es parte del problema.'},
+      {sig:'♏',nom:'Escorpio',txt:'Su fuerza interior le llevará lejos. Su coche, en cambio, sigue en el taller y el mecánico no coge el teléfono desde el martes.'},
+      {sig:'♐',nom:'Sagitario',txt:'El amor llama a su puerta. Si no está, dejará nota. Si está, tómese su tiempo. La precipitación ha arruinado muchas relaciones y varios soufflés.'},
+      {sig:'♑',nom:'Capricornio',txt:'Buena semana para el trabajo. Mala para todo lo demás. Haga balance y decida si el trabajo lo vale. Spoiler: en esta economía, sí.'},
+      {sig:'♒',nom:'Acuario',txt:'Una persona de su entorno le sorprenderá positivamente. Disimule que ya lo sabía.'},
+      {sig:'♓',nom:'Piscis',txt:'Los astros no dicen nada concreto esta semana. Madame Pepiña sugiere interpretarlo positivamente, aunque no garantiza nada.'}
+    ]
+  };
+  try {
+    const saved = localStorage.getItem('crepusculo_data');
+    return saved ? JSON.parse(saved) : def;
+  } catch(e){ return def; }
+}
+
+function guardarDatos(d) {
+  try { localStorage.setItem('crepusculo_data', JSON.stringify(d)); } catch(e){}
+}
+
+let DB = cargarDatos();
+
+// ══════════════════════════════════════════════
+//  CURSOR
+// ══════════════════════════════════════════════
+const dot=document.getElementById('dot'), ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+},{passive:true});
+(function raf(){rx+=(mx-rx)*.22;ry+=(my-ry)*.22;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(raf)})();
+document.addEventListener('mouseover',e=>{
+  if(e.target.closest('a,button,.art-clickable,.sum-it,.horo-it,.carta,.editor-art-item,.art-full-related-item'))
+    document.body.classList.add('hovering');
+  else document.body.classList.remove('hovering');
+});
+
+// ══════════════════════════════════════════════
+//  FECHA
+// ══════════════════════════════════════════════
+function fechaHoy() {
+  const d = new Date();
+  const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `${dias[d.getDay()]}, ${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()} · Año XCV · Nº 34.${200+d.getDate()}`;
+}
+document.getElementById('nav-fecha').textContent = fechaHoy();
+
+// ══════════════════════════════════════════════
+//  LOADER
+// ══════════════════════════════════════════════
+window.addEventListener('load',()=>{
+  ajustarPadding();
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('out');
+    setTimeout(()=>{ renderTodo(); activarReveals(document.getElementById('pag-portada')); }, 100);
+  }, 2500);
+});
+window.addEventListener('resize', ajustarPadding);
+
+function ajustarPadding() {
+  const h = document.getElementById('nav').offsetHeight;
+  document.querySelectorAll('.pagina').forEach(p=>p.style.paddingTop=(h+6)+'px');
+}
+
+// ══════════════════════════════════════════════
+//  RENDER — construye el HTML desde los datos
+// ══════════════════════════════════════════════
+function renderTodo() {
+  renderSecciones();
+  renderPortadaIndice();
+  renderHumor();
+  renderCartas();
+  renderPasatiempos();
+  renderHoroscopo();
+}
+
+function colorSec(s) {
+  const m = {Nacional:'rojo',Cultura:'verde',Sociedad:'ocre',Opinión:'gris'};
+  return m[s]||'rojo';
+}
+
+function artCard(a, last3) {
+  const cls = last3 ? 'no-bb' : '';
+  const noBr = '';
+  return `<div class="art art-clickable ${cls}" onclick="abrirArticulo(${a.id})">
+    <p class="art-sec ${colorSec(a.sec)}">${a.sec}</p>
+    <h2 class="art-tit">${a.tit}</h2>
+    ${a.sum?`<p class="art-sum">${a.sum}</p>`:''}
+    <p class="art-cpo">${a.cuerpo.split('\n')[0].substring(0,180)}…</p>
+    <div class="art-firma">
+      <span class="art-fn">${a.autor}</span>
+      <span class="art-fc">${a.cargo}</span>
+      <span class="art-fd">${a.fecha}</span>
+    </div>
+  </div>`;
+}
+
+function renderSecciones() {
+  ['Nacional','Cultura','Sociedad','Opinión'].forEach(sec=>{
+    const arts = DB.articulos.filter(a=>a.sec===sec);
+    const id = 'grid-'+sec.toLowerCase().replace('ó','o').replace('ó','o');
+    const el = document.getElementById(id==='grid-opi'?'grid-opinion':id);
+    if(!el) return;
+    if(!arts.length){ el.innerHTML='<p style="padding:24px;font-family:\'Special Elite\',cursive;color:var(--lgrey)">No hay artículos en esta sección todavía.</p>'; return; }
+    const cols = Math.min(arts.length,3);
+    let html = `<div class="grid${cols===2?'2':cols>=3?'3':'grid3'}" style="${cols===1?'grid-template-columns:1fr':''}">`;
+    arts.forEach((a,i)=>{
+      const nobb = i >= arts.length - (arts.length%3||3);
+      const nobr = (i+1)%3===0 || i===arts.length-1;
+      html += `<div class="art art-clickable${nobb?' no-bb':''}${nobr?' no-br':''}" onclick="abrirArticulo(${a.id})">
+        <p class="art-sec ${colorSec(a.sec)}">${a.sec}</p>
+        <h2 class="art-tit">${a.tit}</h2>
+        ${a.sum?`<p class="art-sum">${a.sum}</p>`:''}
+        <p class="art-cpo">${(a.cuerpo||'').split('\n')[0].substring(0,180)}…</p>
+        <div class="art-firma">
+          <span class="art-fn">${a.autor}</span>
+          <span class="art-fc">${a.cargo}</span>
+          <span class="art-fd">${a.fecha}</span>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+    el.innerHTML = html;
+  });
+}
+
+function renderPortadaIndice() {
+  const arts = DB.articulos.slice(0,6);
+  const el = document.getElementById('portada-indice');
+  el.innerHTML = arts.map(a=>`
+    <div class="sum-it" onclick="abrirArticulo(${a.id})">
+      <span class="sum-sec">${a.sec}</span>
+      <span class="sum-tit">${a.tit}</span>
+      <span class="sum-pag">Leer artículo →</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════
+//  ABRIR ARTÍCULO COMPLETO
+// ══════════════════════════════════════════════
+function abrirArticulo(id) {
+  const a = DB.articulos.find(x=>x.id===id);
+  if(!a) return;
+  const parrafos = a.cuerpo.split('\n').filter(p=>p.trim());
+  const textoHtml = parrafos.map((p,i)=>
+    i===0 ? `<p class="dropcap">${p}</p>` : `<p>${p}</p>`
+  ).join('');
+  // artículos relacionados (misma sección)
+  const rel = DB.articulos.filter(x=>x.sec===a.sec && x.id!==a.id).slice(0,3);
+  const relHtml = rel.map(r=>`
+    <div class="art-full-related-item" onclick="abrirArticulo(${r.id})">
+      <div class="rs">${r.sec}</div>
+      <div class="rt">${r.tit}</div>
+    </div>`).join('');
+  document.getElementById('articulo-contenido').innerHTML = `
+    <a class="back-btn r" onclick="return ir('${a.sec.toLowerCase().replace('ó','o').replace('ó','o')}')">← Volver a ${a.sec}</a>
+    <div class="art-full-header r r1">
+      <div class="art-full-seccion">${a.sec}</div>
+      <h1 class="art-full-tit">${a.tit}</h1>
+      ${a.sum?`<p class="art-full-sum">${a.sum}</p>`:''}
+      <div class="art-full-meta">
+        <span class="art-full-autor">${a.autor}</span>
+        <span class="art-full-cargo">${a.cargo}</span>
+        <span class="art-full-fecha">${a.fecha}</span>
+      </div>
+    </div>
+    <div class="art-full-body r r2">
+      <div class="art-full-text">${textoHtml}</div>
+      <div class="art-full-sidebar">
+        ${a.cita?`<div class="art-full-pullquote"><p>${a.cita}</p></div>`:''}
+        ${rel.length?`<div class="art-full-related"><h4>También en ${a.sec}</h4>${relHtml}</div>`:''}
+      </div>
+    </div>`;
+  // Guardar sección de vuelta
+  const secId = a.sec.toLowerCase().replace('ó','o').replace('ó','o');
+  document.getElementById('articulo-contenido').querySelector('.back-btn').dataset.sec = secId;
+  ir('articulo');
+}
+
+// ══════════════════════════════════════════════
+//  HUMOR — rota por día del año
+// ══════════════════════════════════════════════
+function renderHumor() {
+  const el = document.getElementById('humor-contenido');
+  if(!DB.chistes.length){ el.innerHTML='<p style="padding:24px">No hay chistes todavía.</p>'; return; }
+  const doy = Math.floor((new Date() - new Date(new Date().getFullYear(),0,0))/(1000*60*60*24));
+  const idx = doy % DB.chistes.length;
+  const c = DB.chistes[idx];
+  // siguiente chiste (idx+1)
+  const next = DB.chistes[(idx+1) % DB.chistes.length];
+  el.innerHTML = `
+    <div style="margin-bottom:10px;font-family:'Special Elite',cursive;font-size:11px;color:var(--lgrey);text-align:right">
+      ✦ Chiste del día · ${new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'})}
+    </div>
+    ${renderChisteHTML(c)}
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid var(--paper3)">
+      <p style="font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.45em;text-transform:uppercase;color:var(--lgrey);margin-bottom:16px">Adelanto de mañana</p>
+      <div style="border:1px solid var(--paper3);padding:16px;background:var(--paper2);font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:var(--lgrey)">
+        «${next.tit}» — Mañana en El Crepúsculo Ibérico
+      </div>
+    </div>`;
+}
+
+function renderChisteHTML(c) {
+  const lineas = c.dial.map(d=>{
+    if(d[0]==='REMATE') return `<div class="d-l d-remate"><span class="d-q">— Remate:</span><span class="d-d">${d[1]}</span></div>`;
+    if(d[1]==='') return `<div class="d-l"><span class="d-q">(${d[0]})</span></div>`;
+    return `<div class="d-l"><span class="d-q">— ${d[0]}:</span><span class="d-d">«${d[1]}»</span></div>`;
+  }).join('');
+  const letra = (c.intro||'El')[0];
+  return `<div class="chiste-bloque r">
+    <div class="ch-vin">
+      <div class="vin-sc">
+        <div class="vin-bg"></div>
+        ${chisteSvgEscena(c)}
+        <div class="vin-firma">${c.firma}</div>
+      </div>
+      <div class="vin-cap"><span>— ${c.tit} —</span></div>
+    </div>
+    <div class="ch-txt">
+      <div class="ch-drop">${letra}</div>
+      <p class="ch-intro"><strong>${c.tit}.</strong> ${c.intro}</p>
+      <div class="ch-sep">— ✦ —</div>
+      <div class="dialogo">${lineas}</div>
+      <div class="ch-foot"><p>Con el espíritu de <strong>La Codorniz</strong> — «La revista más audaz para el lector más inteligente» · 1941–1978</p></div>
+    </div>
+  </div>`;
+}
+
+function chisteSvgEscena(c) {
+  // Escena CSS genérica con dos personajes y bocadillos del chiste
+  const p1 = c.dial[0] ? c.dial[0][0] : '?';
+  const f1 = c.dial[0] ? c.dial[0][1] : '';
+  const p2 = c.dial[1] ? c.dial[1][0] : '?';
+  const f2 = c.dial[1] ? c.dial[1][1] : '';
+  return `
+    <div style="position:absolute;bottom:64px;left:50%;transform:translateX(-50%);width:230px;height:8px;background:var(--ink);border-radius:2px 2px 0 0"></div>
+    <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:230px;height:56px;display:flex;justify-content:space-between;padding:0 10px">
+      <div style="width:8px;background:var(--ink2)"></div>
+      <div style="width:8px;background:var(--ink2)"></div>
+    </div>
+    <div class="fig" style="bottom:62px;left:15%">
+      <div class="fhead"><div class="fhair"></div><div class="fsombrero"></div><div class="feye l"></div><div class="feye r"></div><div class="fmouth"></div><div class="fear l"></div><div class="fear r"></div><div class="fbigote"></div></div>
+      <div class="fbody" style="background:white"><div class="fcorbata"></div><div class="fbrazo l"></div><div class="fbrazo r esc"></div></div>
+      <div class="fpiernas"><div style="display:flex;flex-direction:column;align-items:center"><div class="fpierna"></div><div class="fpie"></div></div><div style="display:flex;flex-direction:column;align-items:center"><div class="fpierna"></div><div class="fpie"></div></div></div>
+    </div>
+    <div class="fig" style="bottom:62px;right:15%">
+      <div class="fhead" style="transform:rotate(3deg)"><div class="feye l"></div><div class="feye r"></div><div style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:11px;height:9px;border:2px solid var(--ink);border-radius:50%;background:white"></div><div class="fear l"></div><div class="fear r"></div></div>
+      <div class="fbody" style="background:var(--paper3)"><div class="fbrazo l"></div><div class="fbrazo r"></div></div>
+      <div class="fpiernas"><div style="display:flex;flex-direction:column;align-items:center"><div class="fpierna"></div><div class="fpie"></div></div><div style="display:flex;flex-direction:column;align-items:center"><div class="fpierna"></div><div class="fpie"></div></div></div>
+    </div>
+    <div class="boc" style="top:14px;left:4%;max-width:130px"><p>${f1.substring(0,40)}${f1.length>40?'…':''}</p><div class="boc-tl"></div></div>
+    <div class="boc" style="top:14px;right:4%;max-width:130px"><p>${f2.substring(0,40)}${f2.length>40?'…':''}</p><div class="boc-tr"></div></div>`;
+}
+
+// ══════════════════════════════════════════════
+//  CARTAS
+// ══════════════════════════════════════════════
+function renderCartas() {
+  const el = document.getElementById('cartas-contenido');
+  if(!DB.cartas.length){ el.innerHTML='<p style="padding:24px">No hay cartas publicadas.</p>'; return; }
+  el.innerHTML = DB.cartas.map(c=>`
+    <div class="carta">
+      <div class="carta-head">
+        <div><div class="carta-autor">${c.autor}</div><div class="carta-lugar">${c.lugar}</div></div>
+        <span class="carta-fecha">${c.fecha}</span>
+      </div>
+      <p class="carta-txt">«${c.txt}»</p>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════
+//  PASATIEMPOS — rotan por día del año
+// ══════════════════════════════════════════════
+function renderPasatiempos() {
+  const doy = Math.floor((new Date() - new Date(new Date().getFullYear(),0,0))/(1000*60*60*24));
+  const p = DB.pasatiempos;
+  const ac = p.acertijos[doy % p.acertijos.length];
+  const tr = p.trabalenguas[doy % p.trabalenguas.length];
+  const te = p.tests[doy % p.tests.length];
+  // parsear acertijo "enunciado(solución)"
+  const acMatch = ac.match(/^(.*)\(([^)]+)\)$/);
+  const acPre = acMatch?acMatch[1].trim():ac;
+  const acSol = acMatch?acMatch[2]:'—';
+  // parsear test "pregunta;a)…;b)…;c)…"
+  const teParts = te.split(';');
+  const tePre = teParts[0];
+  const teOpts = teParts.slice(1);
+  const el = document.getElementById('pasatiempos-contenido');
+  el.innerHTML = `
+  <div class="past-grid r">
+    <div class="past-it">
+      <div class="past-tit">Crucigrama Nº ${doy}</div>
+      ${crucigrama(doy)}
+      <p class="past-body" style="margin-top:10px">
+        <strong>Horizontales:</strong><br/>
+        1 — Lo que siempre falta en las arcas del Estado.<br/>
+        3 — Reunión que podría haber sido un correo.<br/>
+        4 — Lo que llega siempre tarde.<br/><br/>
+        <strong>Verticales:</strong><br/>
+        2 — Documento que se pierde en cualquier trámite.<br/>
+        3 — Lo que promete el político en campaña.<br/><br/>
+        <em style="font-size:11px;color:var(--lgrey)">Soluciones en el próximo número.</em>
+      </p>
+    </div>
+    <div class="past-it">
+      <div class="past-tit">Acertijo del Día</div>
+      <p class="past-body">
+        <strong>Hoy, ${new Date().toLocaleDateString('es-ES',{weekday:'long'})}:</strong><br/><br/>
+        <em>${acPre}</em><br/><br/>
+        <details style="cursor:pointer;margin-top:8px">
+          <summary style="font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--red);font-weight:600">Ver solución</summary>
+          <p style="margin-top:8px;font-family:'Special Elite',cursive;font-size:12px;color:var(--grey);font-style:italic">${acSol}</p>
+        </details>
+        <br/>
+        <strong>Trabalenguas:</strong><br/><br/>
+        <em style="font-size:12px">${tr}</em>
+      </p>
+    </div>
+    <div class="past-it" style="border-right:none">
+      <div class="past-tit">Test de Carácter</div>
+      <p class="past-body">
+        <strong>${tePre}</strong><br/><br/>
+        ${teOpts.map(o=>`${o}<br/>`).join('<br/>')}
+      </p>
+    </div>
+  </div>`;
+}
+
+function crucigrama(seed) {
+  // Genera un crucigrama distinto cada día usando el seed
+  const p = seed % 4;
+  const patterns = [
+    [1,0,1,0,1, 0,1,1,1,1, 1,0,1,0,1, 1,1,1,1,1, 1,0,1,0,1],
+    [1,1,0,1,1, 0,1,1,1,0, 1,1,0,1,1, 0,1,1,1,0, 1,1,0,1,1],
+    [0,1,1,1,0, 1,0,1,0,1, 1,1,0,1,1, 1,0,1,0,1, 0,1,1,1,0],
+    [1,0,1,1,1, 1,1,0,1,1, 0,1,1,1,0, 1,1,0,1,1, 1,1,1,0,1]
+  ][p];
+  const letras = 'AEIOURSTLNMPD';
+  let html = '<div class="cruci cruci-5">';
+  patterns.forEach((b,i)=>{
+    const n = [0,5,10,15].includes(i) ? `<span class="cn">${Math.floor(i/5)+1}</span>` : '';
+    if(b===0) html += '<div class="cc negro"></div>';
+    else html += `<div class="cc">${n}${letras[(i*seed+i*7)%letras.length]}</div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderHoroscopo() {
+  const el = document.getElementById('horoscopo-contenido');
+  el.innerHTML = `
+    <div class="horo-grid r">
+      ${DB.horoscopo.map((h,i)=>`
+        <div class="horo-it">
+          <span class="horo-sig">${h.sig}</span>
+          <div class="horo-nom">${h.nom}</div>
+          <p class="horo-txt">${h.txt}</p>
+        </div>`).join('')}
+    </div>
+    <div class="horo-pie"><p>Madame Pepiña ejerce la astrología desde 1968. No se hace responsable de los astros, de sus consecuencias ni de lo que haga usted con esta información.</p></div>`;
+}
+
+// ══════════════════════════════════════════════
+//  NAVEGACIÓN
+// ══════════════════════════════════════════════
+function ir(seccion) {
+  document.querySelectorAll('.pagina').forEach(p=>p.classList.remove('activa'));
+  const pag = document.getElementById('pag-'+seccion);
+  if(pag){ pag.classList.add('activa'); window.scrollTo({top:0,behavior:'instant'}); setTimeout(()=>activarReveals(pag),80); }
+  document.querySelectorAll('.nav-secs a').forEach(a=>a.classList.remove('activa'));
+  const nb = document.getElementById('nav-'+seccion);
+  if(nb) nb.classList.add('activa');
+  ajustarPadding();
+  return false;
+}
+
+function activarReveals(contenedor) {
+  const els = contenedor.querySelectorAll('.r');
+  els.forEach(el=>el.classList.remove('in'));
+  void contenedor.offsetHeight;
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }});
+  },{threshold:0.04});
+  els.forEach(el=>obs.observe(el));
+  setTimeout(()=>els.forEach(el=>{ const r=el.getBoundingClientRect(); if(r.top<window.innerHeight+100) el.classList.add('in'); }),160);
+}
+
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('slim',scrollY>80),{passive:true});
+
+document.querySelectorAll('.nav-secs a').forEach(a=>{
+  a.addEventListener('mousemove',e=>{ const r=a.getBoundingClientRect(); a.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.07}px,${(e.clientY-r.top-r.height/2)*.07}px)`; });
+  a.addEventListener('mouseleave',()=>a.style.transform='');
+});
+
+// ══════════════════════════════════════════════
+//  EDITOR — acceso por doble clic en "AÑO XCV"
+// ══════════════════════════════════════════════
+function abrirEditor() {
+  document.getElementById('editor-modal').classList.add('open');
+  document.getElementById('editor-login').style.display='block';
+  document.getElementById('editor-body').classList.remove('open');
+  document.getElementById('editor-pass').value='';
+  document.getElementById('editor-err').style.display='none';
+  setTimeout(()=>document.getElementById('editor-pass').focus(),200);
+}
+function cerrarEditor() {
+  document.getElementById('editor-modal').classList.remove('open');
+}
+function loginEditor() {
+  if(document.getElementById('editor-pass').value===PASS){
+    document.getElementById('editor-login').style.display='none';
+    document.getElementById('editor-body').classList.add('open');
+    cargarEditorListas();
+  } else {
+    document.getElementById('editor-err').style.display='block';
+  }
+}
+// Cerrar al hacer clic fuera
+document.getElementById('editor-modal').addEventListener('click',e=>{ if(e.target===document.getElementById('editor-modal')) cerrarEditor(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') cerrarEditor(); });
+
+function edTab(t) {
+  document.querySelectorAll('.editor-tab').forEach((el,i)=>{ el.classList.toggle('activa', ['articulos','nuevo','pasatiempos','chistes','cartas'][i]===t); });
+  document.querySelectorAll('.editor-tab-pane').forEach(el=>el.classList.remove('activa'));
+  document.getElementById('etab-'+t).classList.add('activa');
+}
+
+function cargarEditorListas() {
+  // Lista artículos
+  document.getElementById('editor-lista').innerHTML = DB.articulos.map(a=>`
+    <div class="editor-art-item" onclick="editarArticulo(${a.id})">
+      <span class="it-sec">${a.sec}</span>
+      <span class="it-tit">${a.tit}</span>
+      <span class="it-edit">Editar →</span>
+    </div>`).join('');
+  // Pasatiempos
+  const p = DB.pasatiempos;
+  document.getElementById('ed-acertijo').value = p.acertijos.join('\n');
+  document.getElementById('ed-trabal').value = p.trabalenguas.join('|');
+  document.getElementById('ed-test').value = p.tests.join('\n');
+  // Chistes
+  document.getElementById('chistes-lista').innerHTML = DB.chistes.map(c=>`
+    <div style="border:1px solid var(--paper3);padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;background:var(--paper)">
+      <span style="font-family:'Playfair Display',serif;font-size:14px;font-style:italic">${c.tit}</span>
+      <button onclick="eliminarChiste(${c.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px">✕</button>
+    </div>`).join('');
+  // Cartas
+  document.getElementById('cartas-lista').innerHTML = DB.cartas.map(c=>`
+    <div style="border:1px solid var(--paper3);padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;background:var(--paper)">
+      <span style="font-family:'Special Elite',cursive;font-size:12px">${c.autor} · ${c.lugar}</span>
+      <button onclick="eliminarCarta(${c.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px">✕</button>
+    </div>`).join('');
+}
+
+// Formulario edición artículo (se carga en tab "nuevo" con datos)
+let editando = null;
+function editarArticulo(id) {
+  const a = DB.articulos.find(x=>x.id===id);
+  if(!a) return;
+  editando = id;
+  edTab('nuevo');
+  document.getElementById('n-sec').value = a.sec;
+  document.getElementById('n-autor').value = a.autor;
+  document.getElementById('n-tit').value = a.tit;
+  document.getElementById('n-sum').value = a.sum||'';
+  document.getElementById('n-body').value = a.cuerpo||'';
+  document.getElementById('n-cita').value = a.cita||'';
+}
+function nuevoArticulo() {
+  const tit = document.getElementById('n-tit').value.trim();
+  if(!tit) return;
+  if(editando) {
+    const idx = DB.articulos.findIndex(x=>x.id===editando);
+    if(idx>=0) DB.articulos[idx] = {...DB.articulos[idx],
+      sec:document.getElementById('n-sec').value,
+      autor:document.getElementById('n-autor').value,
+      tit, sum:document.getElementById('n-sum').value,
+      cuerpo:document.getElementById('n-body').value,
+      cita:document.getElementById('n-cita').value
+    };
+    editando = null;
+  } else {
+    const newId = Math.max(0,...DB.articulos.map(x=>x.id))+1;
+    DB.articulos.unshift({
+      id:newId, sec:document.getElementById('n-sec').value,
+      autor:document.getElementById('n-autor').value, cargo:'Redacción',
+      fecha:new Date().toLocaleDateString('es-ES',{day:'numeric',month:'short'}),
+      tit, sum:document.getElementById('n-sum').value,
+      cuerpo:document.getElementById('n-body').value,
+      cita:document.getElementById('n-cita').value
+    });
+  }
+  guardarDatos(DB); mostrarOk(); limpiarNuevo();
+  renderTodo(); cargarEditorListas();
+}
+function limpiarNuevo() {
+  editando=null;
+  ['n-tit','n-sum','n-body','n-autor','n-cita'].forEach(id=>document.getElementById(id).value='');
+}
+function guardarPasatiempos() {
+  DB.pasatiempos.acertijos = document.getElementById('ed-acertijo').value.split('\n').filter(x=>x.trim());
+  DB.pasatiempos.trabalenguas = document.getElementById('ed-trabal').value.split('|').filter(x=>x.trim());
+  DB.pasatiempos.tests = document.getElementById('ed-test').value.split('\n').filter(x=>x.trim());
+  guardarDatos(DB); mostrarOk(); renderPasatiempos();
+}
+function addChiste() {
+  const tit = document.getElementById('ch-tit').value.trim();
+  const intro = document.getElementById('ch-intro').value.trim();
+  const dialRaw = document.getElementById('ch-dial').value.trim();
+  if(!tit||!dialRaw) return;
+  const parts = dialRaw.split('|');
+  const dial = [];
+  for(let i=0;i<parts.length;i+=2) {
+    if(parts[i+1]!==undefined) dial.push([parts[i].trim(), parts[i+1].trim()]);
+  }
+  const newId = Math.max(0,...DB.chistes.map(x=>x.id))+1;
+  DB.chistes.push({id:newId,tit,intro,dial,firma:'Redacción · '+new Date().getFullYear()});
+  guardarDatos(DB); mostrarOk();
+  ['ch-tit','ch-intro','ch-dial'].forEach(id=>document.getElementById(id).value='');
+  cargarEditorListas(); renderHumor();
+}
+function eliminarChiste(id) {
+  if(!confirm('¿Eliminar este chiste?')) return;
+  DB.chistes = DB.chistes.filter(x=>x.id!==id);
+  guardarDatos(DB); mostrarOk(); cargarEditorListas(); renderHumor();
+}
+function addCarta() {
+  const autor = document.getElementById('ca-autor').value.trim();
+  const lugar = document.getElementById('ca-lugar').value.trim();
+  const txt = document.getElementById('ca-txt').value.trim();
+  if(!autor||!txt) return;
+  const newId = Math.max(0,...DB.cartas.map(x=>x.id))+1;
+  const fecha = new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long'});
+  DB.cartas.unshift({id:newId,autor,lugar:lugar||'—',fecha,txt});
+  guardarDatos(DB); mostrarOk();
+  ['ca-autor','ca-lugar','ca-txt'].forEach(id=>document.getElementById(id).value='');
+  cargarEditorListas(); renderCartas();
+}
+function eliminarCarta(id) {
+  if(!confirm('¿Eliminar esta carta?')) return;
+  DB.cartas = DB.cartas.filter(x=>x.id!==id);
+  guardarDatos(DB); mostrarOk(); cargarEditorListas(); renderCartas();
+}
+function mostrarOk() {
+  const el = document.getElementById('ok-msg');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+</script>
+<script src="script-noticias.js"></script>
+</body>
+</html>
